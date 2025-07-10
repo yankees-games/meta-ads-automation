@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Alzam Style - AI Meta Ads Assistant</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f6f6f6;
+    }
+    .chatbox {
+      background: white;
+      padding: 20px;
+      width: 600px;
+      margin: auto;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .message {
+      margin: 10px 0;
+    }
+    .bot {
+      color: #007bff;
+    }
+    .user {
+      color: #111;
+      font-weight: bold;
+    }
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="chatbox">
+    <div class="message bot" id="botMessage">👋 Welcome to Alzam Style! How can I help you today?</div>
+    <input type="text" id="userInput" placeholder="Type your message here..." />
+    <button onclick="handleUserInput()">Send</button>
+  </div>
+
+  <script>
+    function handleUserInput() {
+      const input = document.getElementById("userInput").value.toLowerCase();
+      const chatbox = document.querySelector(".chatbox");
+
+      let response = "";
+
+      if (input.includes("price") || input.includes("cost")) {
+        response = "💸 Our price range:\n- Casual Shirts: PKR 2,000–3,000\n- Kurta Sets: PKR 3,500–5,500\n- Festive Wear: PKR 6,000+";
+      } else if (input.includes("catalog") || input.includes("products")) {
+        response = "🛍️ Browse our top collections:\n- Men's Kurta Collection\n- Women's Festive Wear\n- Casual Streetwear\nVisit: www.alzamstyle.com";
+      } else if (input.includes("order") || input.includes("buy")) {
+        response = "🛒 Let’s place your order!\nPlease send:\n1. Product name\n2. Your size\n3. Delivery address";
+      } else if (input.includes("ads") || input.includes("meta")) {
+        response = "🚀 Thanks for your interest in Alzam Style’s ad service. Please share your business type and ad objective (e.g., traffic, leads, sales).";
+      } else {
+        response = "🤖 I'm here to help with Alzam Style products, orders, or Meta Ads. Please type what you'd like to know.";
+      }
+
+      chatbox.innerHTML += `<div class="message user">${input}</div>`;
+      chatbox.innerHTML += `<div class="message bot">${response}</div>`;
+      document.getElementById("userInput").value = "";
+    }
+  </script>
+
+</body>
+</html>

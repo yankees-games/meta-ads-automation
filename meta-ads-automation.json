@@ -1,0 +1,55 @@
+{
+  "workflow": {
+    "name": "Alzam Style Meta Ads Automation",
+    "trigger": "customer_message_received",
+    "steps": [
+      {
+        "step": "intent_detection",
+        "action": "analyze_message_with_ai",
+        "outputs": ["intent"]
+      },
+      {
+        "step": "decision",
+        "action": "branch_by_intent",
+        "branches": {
+          "product_inquiry": "show_product_catalog",
+          "price_question": "send_pricing_info",
+          "order_request": "collect_order_details",
+          "ads_inquiry": "start_meta_ads_lead",
+          "general_question": "ai_faq_response"
+        }
+      },
+      {
+        "step": "show_product_catalog",
+        "response": {
+          "text": "🛍️ Browse our top collections:\n- Men's Kurta Collection\n- Women's Festive Wear\n- Casual Streetwear\nVisit: www.alzamstyle.com"
+        }
+      },
+      {
+        "step": "send_pricing_info",
+        "response": {
+          "text": "💸 Our price range:\n- Casual Shirts: PKR 2,000–3,000\n- Kurta Sets: PKR 3,500–5,500\n- Festive Wear: PKR 6,000+"
+        }
+      },
+      {
+        "step": "collect_order_details",
+        "form": ["product_name", "size", "shipping_address"],
+        "response": {
+          "text": "🛒 Let’s place your order!\nPlease send:\n1. Product name\n2. Your size\n3. Delivery address"
+        }
+      },
+      {
+        "step": "start_meta_ads_lead",
+        "response": {
+          "text": "🚀 Thanks for your interest in Alzam Style’s ad service. Please share your business type and ad objective (e.g., traffic, leads, sales) so we can start your Meta Ads campaign."
+        }
+      },
+      {
+        "step": "ai_faq_response",
+        "response": {
+          "text": "🤖 I'm here to help with Alzam Style products, orders, or Meta Ads. Please type what you'd like to know."
+        }
+      }
+    ]
+  }
+}
