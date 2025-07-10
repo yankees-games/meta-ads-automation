@@ -1,6 +1,6 @@
 
 {
-  "name": "Alzam Meta Ads AI Automation",
+  "name": "Alzam Customer AI Automation",
   "nodes": [
     {
       "parameters": {
@@ -14,31 +14,12 @@
     },
     {
       "parameters": {
-        "model": "gpt-3.5-turbo",
-        "chatMessage": true,
-        "messagesUi": {
-          "message": [
-            {
-              "role": "system",
-              "text": "You are a helpful assistant for a fashion clothing brand named Alzam Style. Detect if the user's message is about: price, product, order, ads, or general."
-            },
-            {
-              "role": "user",
-              "text": "={{$json[\"body\"]}}"
-            }
-          ]
-        }
+        "functionCode": "const message = $json.body.toLowerCase();\n\nif (message.includes('price') || message.includes('cost')) {\n  return [{ intent: 'price' }];\n} else if (message.includes('product') || message.includes('catalog')) {\n  return [{ intent: 'product' }];\n} else if (message.includes('order') || message.includes('buy') || message.includes('purchase')) {\n  return [{ intent: 'order' }];\n} else {\n  return [{ intent: 'general' }];\n}"
       },
-      "name": "Detect Intent (AI)",
-      "type": "n8n-nodes-base.openai",
+      "name": "Detect Intent (Function)",
+      "type": "n8n-nodes-base.function",
       "typeVersion": 1,
-      "position": [400, 300],
-      "credentials": {
-        "openAiApi": {
-          "id": "YOUR_CREDENTIAL_ID",
-          "name": "OpenAI Account"
-        }
-      }
+      "position": [400, 300]
     },
     {
       "parameters": {
@@ -56,10 +37,6 @@
             {
               "value": "order",
               "output": 2
-            },
-            {
-              "value": "ads",
-              "output": 3
             }
           ]
         }
@@ -102,22 +79,12 @@
     {
       "parameters": {
         "responseData": "text",
-        "responseText": "🚀 Tell us your business type and ad objective (traffic, leads, sales) to begin Meta Ads setup for Alzam Style."
-      },
-      "name": "Start Meta Ads",
-      "type": "n8n-nodes-base.respondToWebhook",
-      "typeVersion": 1,
-      "position": [800, 400]
-    },
-    {
-      "parameters": {
-        "responseData": "text",
-        "responseText": "🤖 I'm here to help with Alzam Style products, orders, or ads. What would you like to know?"
+        "responseText": "🤖 I'm here to help with Alzam Style products, pricing, or ordering. How can I assist you today?"
       },
       "name": "Send General Help",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1,
-      "position": [800, 500]
+      "position": [800, 400]
     }
   ],
   "connections": {
@@ -125,14 +92,14 @@
       "main": [
         [
           {
-            "node": "Detect Intent (AI)",
+            "node": "Detect Intent (Function)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Detect Intent (AI)": {
+    "Detect Intent (Function)": {
       "main": [
         [
           {
@@ -162,13 +129,6 @@
         [
           {
             "node": "Collect Order Details",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Start Meta Ads",
             "type": "main",
             "index": 0
           }
