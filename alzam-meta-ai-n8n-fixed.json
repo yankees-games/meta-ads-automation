@@ -1,0 +1,186 @@
+
+{
+  "name": "Alzam Meta Ads AI Automation",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "alzam-style-ai"
+      },
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [200, 300]
+    },
+    {
+      "parameters": {
+        "model": "gpt-3.5-turbo",
+        "chatMessage": true,
+        "messagesUi": {
+          "message": [
+            {
+              "role": "system",
+              "text": "You are a helpful assistant for a fashion clothing brand named Alzam Style. Detect if the user's message is about: price, product, order, ads, or general."
+            },
+            {
+              "role": "user",
+              "text": "={{$json[\"body\"]}}"
+            }
+          ]
+        }
+      },
+      "name": "Detect Intent (AI)",
+      "type": "n8n-nodes-base.openai",
+      "typeVersion": 1,
+      "position": [400, 300],
+      "credentials": {
+        "openAiApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "OpenAI Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "propertyName": "intent",
+        "rules": {
+          "rules": [
+            {
+              "value": "price",
+              "output": 0
+            },
+            {
+              "value": "product",
+              "output": 1
+            },
+            {
+              "value": "order",
+              "output": 2
+            },
+            {
+              "value": "ads",
+              "output": 3
+            }
+          ]
+        }
+      },
+      "name": "Switch by Intent",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 1,
+      "position": [600, 300]
+    },
+    {
+      "parameters": {
+        "responseData": "text",
+        "responseText": "💸 Our clothing price range:\n- Casual Shirts: PKR 2,000–3,000\n- Kurta Sets: PKR 3,500–5,500\n- Festive Wear: PKR 6,000+"
+      },
+      "name": "Send Price Info",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [800, 100]
+    },
+    {
+      "parameters": {
+        "responseData": "text",
+        "responseText": "🛍️ Browse our top collections:\n- Men's Kurta\n- Women's Festive Wear\nVisit: www.alzamstyle.com"
+      },
+      "name": "Send Product Catalog",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [800, 200]
+    },
+    {
+      "parameters": {
+        "responseData": "text",
+        "responseText": "🛒 Please send:\n1. Product name\n2. Size\n3. Address to place your order."
+      },
+      "name": "Collect Order Details",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [800, 300]
+    },
+    {
+      "parameters": {
+        "responseData": "text",
+        "responseText": "🚀 Tell us your business type and ad objective (traffic, leads, sales) to begin Meta Ads setup for Alzam Style."
+      },
+      "name": "Start Meta Ads",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [800, 400]
+    },
+    {
+      "parameters": {
+        "responseData": "text",
+        "responseText": "🤖 I'm here to help with Alzam Style products, orders, or ads. What would you like to know?"
+      },
+      "name": "Send General Help",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [800, 500]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Detect Intent (AI)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Detect Intent (AI)": {
+      "main": [
+        [
+          {
+            "node": "Switch by Intent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch by Intent": {
+      "main": [
+        [
+          {
+            "node": "Send Price Info",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send Product Catalog",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Collect Order Details",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Start Meta Ads",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send General Help",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
